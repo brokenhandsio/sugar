@@ -1,4 +1,4 @@
-import Validation
+import Vapor
 
 public struct PasswordRegex {
     public let pattern: String

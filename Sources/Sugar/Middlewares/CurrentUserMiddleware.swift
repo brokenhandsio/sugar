@@ -1,4 +1,3 @@
-import Authentication
 import Vapor
 
 public final class CurrentUserProvider<U: Authenticatable>: Provider {

@@ -1,4 +1,3 @@
-import Authentication
 import Vapor
 
 /// Expresses the ability for a type (e.g. a user type) to be logged in.
