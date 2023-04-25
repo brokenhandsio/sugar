@@ -11,18 +11,19 @@ import Leaf
 /// - Parameters:
 ///   - number: Double
 ///   - decimals: Int (default: 2 decimals)
-public final class NumberFormatTag: TagRenderer {
+public final class NumberFormatTag: LeafTag {
     public init() {}
 
-    public func render(tag: TagContext) throws -> Future<TemplateData> {
-
-        guard let number = tag.parameters[safe: 0]?.double else {
-            throw tag.error(reason: "Expected a number")
+    public func render(_ ctx: LeafContext) throws -> LeafData {
+        guard let number = ctx.parameters[safe: 0]?.double else {
+            throw "Expected a number"
         }
-        let decimals = tag.parameters[safe: 1]?.int ?? 2
+        let decimals = ctx.parameters[safe: 1]?.int ?? 2
 
         let formattedNumber = String(format: "%.*f", decimals, number)
 
-        return tag.future(.string(formattedNumber))
+        return .string(formattedNumber)
     }
+    
+    
 }

@@ -1,12 +1,13 @@
+import Vapor
 import Leaf
 
-public extension LeafTagConfig {
+public extension Application.Leaf {
     /// Register multiple tags using the keys as their names.
     ///
     /// - Parameter list: Map of names to tags.
-    mutating func use(_ list: [String: TagRenderer]) {
+    mutating func use(_ list: [String: LeafTag]) {
         for item in list {
-            self.use(item.value, as: item.key)
+            self.tags[item.key] = item.value
         }
     }
 }

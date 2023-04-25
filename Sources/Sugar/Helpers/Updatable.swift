@@ -1,31 +1,20 @@
 import Vapor
 
-public protocol Updatable: class {
+public protocol Updatable {
     associatedtype Update
-    func preUpdate(on req: Request) -> Future<Void>
+    func preUpdate(on req: Request) async throws
     func update(_ update: Update) throws
 }
 
 extension Updatable {
-    public func preUpdate(on req: Request) -> Future<Void> {
-        return req.future()
-    }
+    public func preUpdate(on req: Request) async throws { }
 }
 
 extension Updatable where Update: Decodable {
-    public func applyUpdate(on req: Request) -> Future<Self> {
-        return preUpdate(on: req)
-            .flatTry {
-                try req.content.decode(Update.self).map(self.update)
-            }
-            .transform(to: self)
-    }
-}
-
-extension Future where T: Updatable, T.Update: Decodable {
-    public func applyUpdate(on req: Request) -> Future<T> {
-        return flatMap {
-            $0.applyUpdate(on: req)
-        }
+    public func applyUpdate(on req: Request) async throws -> Self {
+        try await preUpdate(on: req)
+        let data = try req.content.decode(Update.self)
+        try update(data)
+        return self
     }
 }

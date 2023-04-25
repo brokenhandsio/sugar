@@ -7,7 +7,7 @@ public extension String {
 
         var randomString = ""
         for _ in 0 ..< length {
-            let rand = Int.random(0...len-1)
+            let rand = Int.random(in: 0...len-1)
             let char = letters[letters.index(letters.startIndex, offsetBy: rand)]
             randomString += String(char)
         }

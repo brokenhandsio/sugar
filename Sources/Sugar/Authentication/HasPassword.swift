@@ -1,4 +1,4 @@
-import Crypto
+import Vapor
 
 /// Types conforming to this protocol can create, validate, and verify passwords.
 public protocol HasPassword {
@@ -21,7 +21,7 @@ extension HasPassword {
     /// Default complexity for hashing algorithm. Higher values are more secure but significantly
     /// increase the hashing time. Consider overriding and using a lower value for development.
     public static var bCryptCost: Int {
-        return 10
+        return 12
     }
 
     /// Default implementation for validating password strength.
@@ -43,7 +43,7 @@ extension HasPassword {
     /// - Throws: PasswordError.weakPassword when password is not strong enough.
     public static func hashPassword(_ password: String) throws -> String {
         try validateStrength(of: password)
-        return try BCrypt.hash(password, cost: bCryptCost)
+        return try Bcrypt.hash(password, cost: bCryptCost)
     }
 
     /// Verifies whether provided password matches the hashed password.
@@ -51,6 +51,6 @@ extension HasPassword {
     /// - Parameter password: password to verify.
     /// - Returns: a boolean indicating whether passwords match.
     public func verify(_ password: String) throws -> Bool {
-        return try BCrypt.verify(password, created: self[keyPath: Self.passwordKey])
+        return try Bcrypt.verify(password, created: self[keyPath: Self.passwordKey])
     }
 }

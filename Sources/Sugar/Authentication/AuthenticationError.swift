@@ -52,7 +52,7 @@ extension AuthenticationError: AbortError {
 }
 
 // MARK: - Debuggable
-extension AuthenticationError: Debuggable {
+extension AuthenticationError: DebuggableError {
 
     /// See `Debuggable.identifier`
     public var identifier: String {

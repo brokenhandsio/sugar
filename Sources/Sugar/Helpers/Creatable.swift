@@ -22,7 +22,7 @@ public protocol Creatable {
     /// A step that is to be performed during the actual creation. Can be used for validation.
     ///
     /// - Parameter req: the current `Request`.
-    static func preCreate(on req: Request) -> Future<Void>
+    static func preCreate(on req: Request) async throws
 
     /// Create a new instance of the conforming type based on the associated `Create` type.
     ///
@@ -33,21 +33,17 @@ public protocol Creatable {
 extension Creatable {
 
     /// See `Creatable`. A default implementation that does nothing.
-    public static func preCreate(on req: Request) -> Future<Void> {
-        return req.future()
-    }
+    public static func preCreate(on req: Request) async throws { }
 
     /// The main "interface" of Creatable. This ties together the `preCreate`, decoding and
     /// initializing steps.
     ///
     /// - Parameter req: the current `Request`.
     /// - Returns: a `Future` of the `Creatable` type.
-    public static func create(on req: Request) -> Future<Self> {
-        return preCreate(on: req)
-            .flatMap {
-                try req.content.decode(Create.self)
-            }
-            .map(Self.init)
+    public static func create(on req: Request) async throws -> Self {
+        try await preCreate(on: req)
+        let data = try req.content.decode(Create.self)
+        return try self.init(data)
     }
 }
 
