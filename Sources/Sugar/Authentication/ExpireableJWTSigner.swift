@@ -8,9 +8,9 @@ public struct ExpireableJWTSigner {
     public let expirationPeriod: TimeInterval
 
     /// The signer used for signing JWTs
-    public let signer: JWTSigner
+    public let signer: JWTAlgorithm
 
-    public init(expirationPeriod: TimeInterval, signer: JWTSigner) {
+    public init(expirationPeriod: TimeInterval, signer: some JWTAlgorithm) {
         self.expirationPeriod = expirationPeriod
         self.signer = signer
     }
